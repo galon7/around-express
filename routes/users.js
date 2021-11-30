@@ -7,7 +7,7 @@ const usersPath = path.join('data', 'users.json');
 router.get('/users', (req, res) => {
   fsPromises.readFile(usersPath)
     .then((data) => {
-      res.status(200).send(data);
+      res.status(200).send(JSON.parse(data));
     }).catch((err) => {
       console.log(err);
       res.status(500).send({ message: 'An error has occurred on the server' });
