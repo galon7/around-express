@@ -6,11 +6,11 @@ const cards = require('./routes/cards');
 const users = require('./routes/users');
 
 const app = express();
-mongoose.connect('mongodb://localhost:27017/mydb', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-});
+
+mongoose
+  .connect('mongodb://localhost:27017/aroundb')
+  .then((res) => console.log('Connected to DB'))
+  .catch((err) => console.log('DB connection error: ' + err));
 
 app.use('/', cards);
 app.use('/', users);
