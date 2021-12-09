@@ -33,3 +33,31 @@ module.exports.createUser = (req, res) => {
       else res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
+
+module.exports.updateProfile = (req, res) => {
+  console.log(req.body);
+  User.findByIdAndUpdate(req.user._id, req.body, {
+    new: true,
+    runValidators: true,
+    upsert: false,
+  })
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: 'An error has occurred on the server' });
+    });
+};
+
+module.exports.updateAvatar = (req, res) => {
+  console.log(req.body);
+  User.findByIdAndUpdate(req.user._id, req.body, {
+    new: true,
+    runValidators: true,
+    upsert: false,
+  })
+    .then((user) => res.send({ data: user }))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send({ message: 'An error has occurred on the server' });
+    });
+};
