@@ -10,26 +10,28 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.createCard = (req, res) => {
-  const { name, link, owner } = req.body;
+  const owner = req.user._id;
+  const { name, link } = req.body;
   Card.create({ name, link, owner })
     .then((card) => res.status(201).send({ data: card }))
     .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: 'An error has occurred on the server' });
+      const ERROR_CODE = 400;
+      if (err.name === 'ValidationError') res.status(ERROR_CODE).send({ message: 'Error, please check your data' });
+      else res.status(500).send({ message: 'An error has occurred on the server' });
     });
 };
 
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
+    .orFail(() => {
+      const error = new Error('No card found with that id');
+      error.statusCode = 404;
+      throw error;
+    })
     .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: 'Card not found' });
-        return;
-      }
       res.status(200).send({ data: card });
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).send({ message: 'An error has occurred on the server' });
+      res.status(err.statusCode).send({ message: err.message });
     });
 };
