@@ -12,6 +12,13 @@ mongoose
   .then(console.log('Connected to DB'))
   .catch((err) => console.log(`DB connection error: ${err}`));
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '61b206427fa58b3ea007ef80',
+  };
+  next();
+});
+
 app.use(express.json());
 app.use('/', users);
 app.use('/', cards);
