@@ -1,11 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const { PORT = 3000 } = process.env;
 const cards = require('./routes/cards');
 const users = require('./routes/users');
 
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
+app.use(helmet());
 
 mongoose
   .connect('mongodb://localhost:27017/aroundb')
