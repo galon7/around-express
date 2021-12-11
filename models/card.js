@@ -10,6 +10,13 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
+    validate: {
+      validator(avtr) {
+        // eslint-disable-next-line no-useless-escape
+        return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(avtr);
+      },
+      message: 'Sorry, this is not a valid URL.',
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
